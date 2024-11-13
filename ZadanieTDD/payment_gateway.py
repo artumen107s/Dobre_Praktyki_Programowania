@@ -1,0 +1,1 @@
+#  Interfejs PaymentGateway oraz wszelkie niezbędne klasy pomocnicze, takie jak TransactionResult oraz TransactionStatus.

@@ -1,0 +1,1 @@
+# Definicje wyjątków NetworkException, PaymentException oraz RefundException
