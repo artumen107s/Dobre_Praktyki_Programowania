@@ -6,31 +6,33 @@ from payment_processor import PaymentProcessor
 from payment_gateway import PaymentGateway, TransactionResult, TransactionStatus
 from exceptions import NetworkException, PaymentException, RefundException
 
+
 class TestPaymentProcessor(unittest.TestCase):
-    
+
     @patch("time.sleep", return_value=None)
     def test_process_payment_success(self, _):
         # Mockowanie PaymentGateway
         gateway_mock = Mock(spec=PaymentGateway)
-        gateway_mock.charge.return_value = TransactionResult(success=True, transaction_id="12345", message="OK")
-        
+        gateway_mock.charge.return_value = TransactionResult(
+            success=True, transaction_id="12345", message="OK")
+
         # Inicjalizacja PaymentProcessor z mockiem
         processor = PaymentProcessor(gateway=gateway_mock)
-        
+
         # Weryfikacja metody processPayment
         result = processor.processPayment("user_1", 100.0)
-        
+
         self.assertTrue(result.success)
         self.assertEqual(result.transaction_id, "12345")
         self.assertEqual(result.message, "OK")
-        
+
     # Mockowanie sleep, aby testy były szybsze
     @patch("time.sleep", return_value=None)
     def test_process_payment_invalid_amount(self, _):
         # Mockowanie PaymentGateway
         gateway_mock = Mock(spec=PaymentGateway)
         processor = PaymentProcessor(gateway=gateway_mock)
-        
+
         # Sprawdzenie, czy wywołanie z ujemną kwotą zgłasza ValueError
         with self.assertRaises(ValueError):
             processor.processPayment("user_1", -50.0)
@@ -40,12 +42,12 @@ class TestPaymentProcessor(unittest.TestCase):
         # Mockowanie PaymentGateway
         gateway_mock = Mock(spec=PaymentGateway)
         processor = PaymentProcessor(gateway=gateway_mock)
-        
+
         # Sprawdzenie, czy wywołanie z pustym user_id zgłasza ValueError
         with self.assertRaises(ValueError):
             processor.processPayment("", 50.0)
 
-    @patch("time.sleep", return_value=None)  
+    @patch("time.sleep", return_value=None)
     def test_process_payment_network_exception(self, _):
         # Mockowanie PaymentGateway
         gateway_mock = Mock(spec=PaymentGateway)
@@ -78,14 +80,16 @@ class TestPaymentProcessor(unittest.TestCase):
     @patch("time.sleep", return_value=None)
     def test_log_payment_success(self, _):
         gateway_mock = Mock(spec=PaymentGateway)
-        gateway_mock.charge.return_value = TransactionResult(success=True, transaction_id="12345", message="OK")
+        gateway_mock.charge.return_value = TransactionResult(
+            success=True, transaction_id="12345", message="OK")
 
         processor = PaymentProcessor(gateway=gateway_mock)
 
         with self.assertLogs('payment_processor', level='INFO') as log:
             processor.processPayment("user_1", 100.0)
             # Sprawdzenie, czy log zawiera komunikat o sukcesie
-            self.assertIn("Payment successful for user user_1 with amount 100.0", log.output[0])
+            self.assertIn(
+                "Payment successful for user user_1 with amount 100.0", log.output[0])
 
     @patch("time.sleep", return_value=None)
     def test_log_network_exception(self, _):
@@ -97,7 +101,8 @@ class TestPaymentProcessor(unittest.TestCase):
         with self.assertLogs('payment_processor', level='ERROR') as log:
             processor.processPayment("user_1", 100.0)
             # Sprawdzenie, czy log zawiera komunikat o błędzie sieci
-            self.assertIn("Network error during payment for user user_1", log.output[0])
+            self.assertIn(
+                "Network error during payment for user user_1", log.output[0])
 
     @patch("time.sleep", return_value=None)
     def test_log_payment_exception(self, _):
@@ -109,12 +114,14 @@ class TestPaymentProcessor(unittest.TestCase):
         with self.assertLogs('payment_processor', level='ERROR') as log:
             processor.processPayment("user_1", 100.0)
             # Sprawdzenie, czy log zawiera komunikat o błędzie płatności
-            self.assertIn("Payment failed for user user_1 due to payment exception", log.output[0])
+            self.assertIn(
+                "Payment failed for user user_1 due to payment exception", log.output[0])
 
     @patch("time.sleep", return_value=None)
     def test_refund_payment_success(self, _):
         gateway_mock = Mock(spec=PaymentGateway)
-        gateway_mock.refund.return_value = TransactionResult(success=True, transaction_id="12345", message="Refund successful")
+        gateway_mock.refund.return_value = TransactionResult(
+            success=True, transaction_id="12345", message="Refund successful")
 
         processor = PaymentProcessor(gateway=gateway_mock)
 
@@ -138,7 +145,8 @@ class TestPaymentProcessor(unittest.TestCase):
     @patch("time.sleep", return_value=None)
     def test_refund_payment_network_exception(self, _):
         gateway_mock = Mock(spec=PaymentGateway)
-        gateway_mock.refund.side_effect = NetworkException("Network error during refund")
+        gateway_mock.refund.side_effect = NetworkException(
+            "Network error during refund")
 
         processor = PaymentProcessor(gateway=gateway_mock)
 
@@ -180,7 +188,8 @@ class TestPaymentProcessor(unittest.TestCase):
     @patch("time.sleep", return_value=None)
     def test_get_payment_status_network_exception(self, _):
         gateway_mock = Mock(spec=PaymentGateway)
-        gateway_mock.get_status.side_effect = NetworkException("Network error during status retrieval")
+        gateway_mock.get_status.side_effect = NetworkException(
+            "Network error during status retrieval")
 
         processor = PaymentProcessor(gateway=gateway_mock)
 
