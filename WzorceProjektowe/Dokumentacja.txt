@@ -1,0 +1,19 @@
+1. Singleton - LibraryCatalog
+Singleton jest wygodny, ponieważ mogę zaimplementować jeden główny katalog książek,
+który będzie centralnym miescem zarządzania danymi książek i do którego będę mieć dostęp z każdego miejsca w aplikacji.
+Usprawnia on zarządzanie systemem.
+
+2. Adapter - Importowanie danych książek
+Wzorzec Adapter umożliwia integrację danych książek pochodzących z różnych formatów. Osobiście wykorzystałem JSON i CSV do pokazania, jak pomocne to może być.
+Adapter przekształca dane do jednego standardowego formatu używanego przez system. Kiedy biblioteka otrzyma dane z różnych źródeł, nie będzie problem ich odczytać.
+
+3. Factory - UserFactory
+Wzorzec Factory został wykorzystany do tworzenia obiektów użytkowników, co tworzy system zarządzania uprawnieniami. Dla przykładu, można wdrożyć inne uprawnienia Studentowi,
+a inne Nauczycielowi.
+
+4. Observer - Powiadomienia użytkowników
+Observer w projekcie przyda się do implementacji systemu powiadomień. Na przykład, Student może zapisać się do jakiegoś newslettera albo powiadomień o dostepności danej książki.
+
+5. Facade - LibraryInterface
+Facade zmniejsza złożoność systemu dla użytkowników końcowych i developerów, którzy korzystają np. z API systemu. Pomaga w utrzymaniu i rozbudowie kodu, umożliwia wykonywanie operacji,
+takich jak wyszukiwanie, dodawanie czy wypożyczenie książek.
